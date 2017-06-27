@@ -24,7 +24,7 @@ public class Main {
 /** /
         int tasks = test_2(notifier, 30);
 /**/
-        int tasks = test_3(notifier, 1000);
+        int tasks = test_3(notifier, 10000);
 /**/
 
         Logger.out("SHUTDOWN ...");
