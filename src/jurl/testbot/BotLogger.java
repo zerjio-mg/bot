@@ -36,6 +36,16 @@ public class BotLogger {
         );
     }
 
+    public static void error(String message, Object...args) {
+
+        System.out.printf(
+                "%sERROR: %s%s\n",
+                ANSI_RED,
+                String.format(message, args),
+                ANSI_RESET
+        );
+    }
+
     public static void error(Context context, String message, Object...args) {
 
         System.out.printf(

@@ -1,5 +1,7 @@
 package jurl.testbot;
 
+import java.util.List;
+
 public interface Context {
 
     Context setCurrentScript(String script);
@@ -22,11 +24,17 @@ public interface Context {
 
     int getTotalTestCount();
 
-    int incFailsCount();
+    int addFail(String message);
+
+    List<String> getFails();
 
     int getFailsCount();
 
-    Context set(String key, Object value);
+    Context setGlobalData(String key, Object value);
+
+    Context setTestData(String key, Object value);
 
     Object get(String key);
+
+    void clearTestData();
 }

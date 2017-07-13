@@ -50,4 +50,8 @@ class BaseActions implements BotActions {
             context.getCurrentScript()
         );
     }
+
+    protected void out(String format, Object... args) {
+//        BotLogger.out(format, args);
+    }
 }

@@ -43,6 +43,8 @@ public class BotEngine {
 
     public void run() {
 
+        long start = System.currentTimeMillis();
+
         context = new ContextContainer();
 
         registerActions(new SimpleActions());
@@ -56,6 +58,28 @@ public class BotEngine {
 
         cleanup();
 
+        long end = System.currentTimeMillis();
+
+        long spendSeconds = (end - start) / 1000;
+
+        long hours = spendSeconds / 3600;
+        long minutes = (spendSeconds % 3600) / 60;
+        long seconds = (spendSeconds % 3600) % 60;
+
+        BotLogger.newLine();
+        BotLogger.out("Test finished.");
+
+        if (context.getFailsCount() > 0) {
+
+            BotLogger.out("\nThere were errors [%d]:\n", context.getFailsCount());
+
+            for (String fail : context.getFails()) {
+                BotLogger.error(fail);
+            }
+        }
+
+        BotLogger.newLine();
+        BotLogger.out("Spent time: %02d:%02d:%02d", hours, minutes, seconds);
         BotLogger.out("Executed %d tests", context.getTotalTestCount());
         BotLogger.out("Failed %d tests", context.getFailsCount());
     }
@@ -75,7 +99,7 @@ public class BotEngine {
 
     private void processBotScript(String script) {
 
-        BotLogger.out("\nScript: %s", script);
+        BotLogger.out("\nScript: %s\n", script);
 
         context.setCurrentScript(script);
 
@@ -115,6 +139,10 @@ public class BotEngine {
 
             if (isValidDeclaration(declaration)) {
 
+                if (!skipTest) {
+                    BotLogger.out("%7s   %s", declaration, sentence);
+                }
+
                 if (isTestDeclaration(declaration)) {
                     afterTest();
                     beforeTest(sentence);
@@ -129,15 +157,12 @@ public class BotEngine {
                 BotSentence bs = lookupBotSentence(sentence);
                 if (bs != null) {
                     if (bs.execute(sentence, context)) {
-                        BotLogger.out("%7s   %s", declaration, sentence);
                         return;
                     }
 
-                    BotLogger.error(context, "%7s   %s", declaration, sentence);
-
-                    context.incFailsCount();
-
                     skipTest = true;
+
+                    return;
 
                 } else {
                     BotLogger.error(context, "Undefined sentence '%s'", sentence);

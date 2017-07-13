@@ -91,12 +91,13 @@ public class BotSentence {
                 t = e;
             }
 
+            BotLogger.newLine();
             BotLogger.error(
                 context,
-                "Error executing sentence '%s' : %s",
-                sentence,
                 t.getMessage()
             );
+
+            context.addFail(t.getMessage());
 
             return false;
         }

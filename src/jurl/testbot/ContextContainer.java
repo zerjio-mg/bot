@@ -1,11 +1,17 @@
 package jurl.testbot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ContextContainer implements Context {
 
-    private Map<String, Object> data;
+    private Map<String, Object> globalData;
+
+    private Map<String, Object> testData;
+
+    private List<String> fails;
 
     private String scriptName;
 
@@ -20,7 +26,9 @@ public class ContextContainer implements Context {
     private int failsCount;
 
     public ContextContainer() {
-        data = new HashMap();
+        globalData = new HashMap();
+        testData = new HashMap();
+        fails = new ArrayList();
     }
 
     @Override
@@ -88,8 +96,16 @@ public class ContextContainer implements Context {
     }
 
     @Override
-    public int incFailsCount() {
+    public int addFail(String message) {
+
+        fails.add(String.format("[%s:%d] %s", getCurrentScript(), getCurrentScriptLine(), message));
+
         return ++failsCount;
+    }
+
+    @Override
+    public List<String> getFails() {
+        return fails;
     }
 
     @Override
@@ -98,15 +114,31 @@ public class ContextContainer implements Context {
     }
 
     @Override
-    public Context set(String key, Object value) {
+    public Context setGlobalData(String key, Object value) {
 
-        data.put(key, value);
+        globalData.put(key, value);
+
+        return this;
+    }
+
+    @Override
+    public Context setTestData(String key, Object value) {
+
+        testData.put(key, value);
 
         return this;
     }
 
     @Override
     public Object get(String key) {
-        return data.get(key);
+
+        Object value = testData.get(key);
+
+        return (value == null)? globalData.get(key) : value;
+    }
+
+    @Override
+    public void clearTestData() {
+        testData.clear();
     }
 }

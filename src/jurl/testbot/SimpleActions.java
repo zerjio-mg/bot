@@ -3,11 +3,10 @@ package jurl.testbot;
 public class SimpleActions extends BaseActions {
 
     @BotStatement(statement = "The user {user} starts match")
-    public void TheuserStartsMatch(Context context, Arguments arguments) {
+    public void TheUserStartsMatch(Context context, Arguments arguments) {
 
-        BotLogger.debug(
-            context,
-            "The user <%s> starts match]",
+        out(
+            "> The user <%s> starts match]",
             arguments.getString("user")
         );
     }
@@ -15,27 +14,28 @@ public class SimpleActions extends BaseActions {
     @BotStatement(statement = "Something happens")
     public void SomethingHappens(Context context, Arguments arguments) {
 
-        BotLogger.debug(context, "Something happens");
+        out("> Something happens");
     }
 
     @BotStatement(statement = "More things happen")
     public void MoreThingsHappen(Context context, Arguments arguments) {
 
-        BotLogger.debug(context, "More things happen");
+        out("> More things happen");
+
+//        throw new BotException("Testing exception caught");
     }
 
     @BotStatement(statement = "The match finishes")
     public void TheMatchFinishes(Context context, Arguments arguments) {
 
-        BotLogger.debug(context, "The match finishes");
+        out("> The match finishes");
     }
 
     @BotStatement(statement = "The user {user} gets {cards} cards")
     public void TheUserGetsCards(Context context, Arguments arguments) {
 
-        BotLogger.debug(
-            context,
-            "The user <%s> gets <%d> cards",
+        out(
+            "> The user <%s> gets <%d> cards",
             arguments.getString("user"),
             arguments.getInteger("cards") * 10
         );
