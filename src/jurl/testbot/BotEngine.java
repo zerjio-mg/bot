@@ -41,7 +41,30 @@ public class BotEngine {
         pattern = Pattern.compile(SENTENCE_PATTERN);
     }
 
-    public void run() {
+    public void list(String[] args) {
+
+        registerActions(new SimpleActions());
+        registerActions(new MoreActions());
+
+        String actions = null;
+        for(BotSentence sentence: sentences) {
+            if (!sentence.getSubject().getName().equals(actions)) {
+                actions = sentence.getSubject().getName();
+                System.out.printf("\n[%s]\n", actions);
+            }
+            System.out.printf("  - %s\n", sentence.getBaseSentence());
+        }
+
+        System.out.println();
+    }
+
+    public void run(String[] args) {
+
+        String folder = "";
+
+        if (args.length > 0) {
+            folder = String.format("%s/", args[0]);
+        }
 
         long start = System.currentTimeMillis();
 
@@ -52,9 +75,9 @@ public class BotEngine {
 
         boot();
 
-        processBotScript("test.bot");
-        processBotScript("test_1.bot");
-        processBotScript("test_2.bot");
+        processBotScript(String.format("%s%s", folder, "test.bot"));
+        processBotScript(String.format("%s%s", folder, "test_1.bot"));
+        processBotScript(String.format("%s%s", folder, "test_2.bot"));
 
         cleanup();
 
@@ -99,7 +122,7 @@ public class BotEngine {
 
     private void processBotScript(String script) {
 
-        BotLogger.out("\nScript: %s\n", script);
+        BotLogger.out("\nScript: %s", script);
 
         context.setCurrentScript(script);
 
@@ -139,18 +162,19 @@ public class BotEngine {
 
             if (isValidDeclaration(declaration)) {
 
-                if (!skipTest) {
-                    BotLogger.out("%7s   %s", declaration, sentence);
+                if (isTestDeclaration(declaration)) {
+                    BotLogger.newLine();
+                    afterTest();
                 }
 
-                if (isTestDeclaration(declaration)) {
-                    afterTest();
-                    beforeTest(sentence);
-                    BotLogger.newLine();
+                if (skipTest ) {
                     return;
                 }
 
-                if (skipTest) {
+                BotLogger.out("%7s   %s", declaration, sentence);
+
+                if (isTestDeclaration(declaration)) {
+                    beforeTest(sentence);
                     return;
                 }
 
@@ -224,8 +248,6 @@ public class BotEngine {
 
     private void beforeTest(String test) {
 
-        skipTest = false;
-
         context.setCurrentTest(test);
         context.incCurrentTestCount();
 
@@ -243,6 +265,8 @@ public class BotEngine {
         for (BotActions action : actions) {
             action.afterTest(context);
         }
+
+        skipTest = false;
     }
 
     private void afterScript() {

@@ -25,11 +25,11 @@ public class BotSentence {
 
     private Pattern pattern;
 
-    private Object subject;
+    private BotActions subject;
 
     private Method action;
 
-    public BotSentence(Object subject, Method action, String sentence) {
+    public BotSentence(BotActions subject, Method action, String sentence) {
 
         parameters = new ArrayList();
 
@@ -38,6 +38,14 @@ public class BotSentence {
         this.baseSentence = sentence;
 
         parseSentence();
+    }
+
+    public BotActions getSubject() {
+        return subject;
+    }
+
+    public String getBaseSentence() {
+        return baseSentence;
     }
 
     /**
