@@ -2,13 +2,11 @@ package jurl.statemachine;
 
 public interface State {
 
+    static final String INIT = "state.init";
+
+    static final String END = "state.end";
+
     String getName();
 
-    Event getDefaultTriggerEvent();
-
-    State setToState(State toState);
-
-    State setToState(String stateName);
-
-    Event run(Event event);
+    Event handleEvent(Event event);
 }

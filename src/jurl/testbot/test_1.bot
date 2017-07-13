@@ -1,0 +1,18 @@
+;
+; Comments
+; are
+;   here ...
+;
+
+Test    Simple test ...
+Given   The user 'pim' starts match
+ When   Something happens
+  And   More things happen
+ Then   The match finishes
+  And   The user pim gets 5 cards
+
+
+Test    Another test ...
+Given   The user 'pim' starts match
+When    Something happens
+Then    The user "pim" gets 3 cards
