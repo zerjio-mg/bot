@@ -1,9 +1,9 @@
 package jurl.testbot;
 
-public class MoreActions extends BaseActions {
+public class MoreSentencesGroup extends BotBaseSentencesGroup {
 
-    @BotStatement(statement = "The user {from_user} gifts {cards} cards to user {to_user}")
-    public void TheUserStartsMatch(Context context, Arguments arguments) {
+    @BotSentence(sentence = "The user {from_user} gifts {cards} cards to user {to_user}")
+    public void TheUserStartsMatch(BotContext botContext, Arguments arguments) {
 
         out(
             "> The user <%s> gifts <%d> cards to user <%s>",

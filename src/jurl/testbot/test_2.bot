@@ -3,5 +3,5 @@ Test    moooore tests
 
 Given   Something happens
  When   Something happens
- Then   The user "pimp" gifts 66 cards to user "pum"
+ Then   The user "pimp" gifts 666 cards to user "pum"
   And   Something happens

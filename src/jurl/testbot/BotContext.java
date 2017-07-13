@@ -2,21 +2,21 @@ package jurl.testbot;
 
 import java.util.List;
 
-public interface Context {
+public interface BotContext {
 
-    Context setCurrentScript(String script);
+    BotContext setCurrentScript(String script);
 
     String getCurrentScript();
 
-    Context setCurrentScriptLine(int lineCount);
+    BotContext setCurrentScriptLine(int lineCount);
 
     int getCurrentScriptLine();
 
-    Context setCurrentTest(String test);
+    BotContext setCurrentTest(String test);
 
     String getCurrentTest();
 
-    Context resetCurrentTestCount();
+    BotContext resetCurrentTestCount();
 
     int getCurrentTestCount();
 
@@ -30,9 +30,9 @@ public interface Context {
 
     int getFailsCount();
 
-    Context setGlobalData(String key, Object value);
+    BotContext setGlobalData(String key, Object value);
 
-    Context setTestData(String key, Object value);
+    BotContext setTestData(String key, Object value);
 
     Object get(String key);
 

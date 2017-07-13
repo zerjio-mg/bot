@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ContextContainer implements Context {
+public class BotContextContainer implements BotContext {
 
     private Map<String, Object> globalData;
 
@@ -25,14 +25,14 @@ public class ContextContainer implements Context {
 
     private int failsCount;
 
-    public ContextContainer() {
+    public BotContextContainer() {
         globalData = new HashMap();
         testData = new HashMap();
         fails = new ArrayList();
     }
 
     @Override
-    public Context setCurrentScript(String script) {
+    public BotContext setCurrentScript(String script) {
         scriptName = script;
         currentScriptLine = 0;
 
@@ -45,7 +45,7 @@ public class ContextContainer implements Context {
     }
 
     @Override
-    public Context setCurrentScriptLine(int lineCount) {
+    public BotContext setCurrentScriptLine(int lineCount) {
         currentScriptLine = lineCount;
 
         return this;
@@ -57,7 +57,7 @@ public class ContextContainer implements Context {
     }
 
     @Override
-    public Context setCurrentTest(String test) {
+    public BotContext setCurrentTest(String test) {
 
         currentTestName = test;
 
@@ -70,7 +70,7 @@ public class ContextContainer implements Context {
     }
 
     @Override
-    public Context resetCurrentTestCount() {
+    public BotContext resetCurrentTestCount() {
 
         currentTestCount = 0;
 
@@ -114,7 +114,7 @@ public class ContextContainer implements Context {
     }
 
     @Override
-    public Context setGlobalData(String key, Object value) {
+    public BotContext setGlobalData(String key, Object value) {
 
         globalData.put(key, value);
 
@@ -122,7 +122,7 @@ public class ContextContainer implements Context {
     }
 
     @Override
-    public Context setTestData(String key, Object value) {
+    public BotContext setTestData(String key, Object value) {
 
         testData.put(key, value);
 

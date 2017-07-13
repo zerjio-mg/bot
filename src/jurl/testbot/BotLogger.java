@@ -24,13 +24,13 @@ public class BotLogger {
         );
     }
 
-    public static void warning(Context context, String message, Object...args) {
+    public static void warning(BotContext botContext, String message, Object...args) {
 
         System.out.printf(
                 "%sWARNING: [%s:%s] %s%s\n",
                 ANSI_YELLOW,
-                context.getCurrentScript(),
-                context.getCurrentScriptLine(),
+                botContext.getCurrentScript(),
+                botContext.getCurrentScriptLine(),
                 String.format(message, args),
                 ANSI_RESET
         );
@@ -46,19 +46,19 @@ public class BotLogger {
         );
     }
 
-    public static void error(Context context, String message, Object...args) {
+    public static void error(BotContext botContext, String message, Object...args) {
 
         System.out.printf(
                 "%sERROR: [%s:%s] %s%s\n",
                 ANSI_RED,
-                context.getCurrentScript(),
-                context.getCurrentScriptLine(),
+                botContext.getCurrentScript(),
+                botContext.getCurrentScriptLine(),
                 String.format(message, args),
                 ANSI_RESET
         );
     }
 
-    public static void debug(Context context, String message, Object...args) {
+    public static void debug(BotContext botContext, String message, Object...args) {
 
         if (!verbose) {
             return;
@@ -67,8 +67,8 @@ public class BotLogger {
         System.out.printf(
                 "%sDEBUG: [%s:%s] %s%s\n",
                 ANSI_BLUE,
-                context.getCurrentScript(),
-                context.getCurrentScriptLine(),
+                botContext.getCurrentScript(),
+                botContext.getCurrentScriptLine(),
                 String.format(message, args),
                 ANSI_RESET
         );
