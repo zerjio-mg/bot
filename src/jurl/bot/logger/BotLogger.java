@@ -1,4 +1,6 @@
-package jurl.testbot;
+package jurl.bot.logger;
+
+import jurl.bot.engine.BotRuntime;
 
 public class BotLogger {
 
@@ -24,7 +26,7 @@ public class BotLogger {
         );
     }
 
-    public static void warning(BotContext botContext, String message, Object...args) {
+    public static void warning(BotRuntime botContext, String message, Object...args) {
 
         System.out.printf(
                 "%sWARNING: [%s:%s] %s%s\n",
@@ -46,7 +48,7 @@ public class BotLogger {
         );
     }
 
-    public static void error(BotContext botContext, String message, Object...args) {
+    public static void error(BotRuntime botContext, String message, Object...args) {
 
         System.out.printf(
                 "%sERROR: [%s:%s] %s%s\n",
@@ -58,7 +60,7 @@ public class BotLogger {
         );
     }
 
-    public static void debug(BotContext botContext, String message, Object...args) {
+    public static void debug(BotRuntime botContext, String message, Object...args) {
 
         if (!verbose) {
             return;

@@ -1,4 +1,4 @@
-package jurl.testbot;
+package jurl.bot.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

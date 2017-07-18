@@ -1,11 +1,11 @@
-package jurl.testbot;
+package jurl.bot.engine;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BotContextContainer implements BotContext {
+public class BaseBotRuntime implements BotRuntime {
 
     private Map<String, Object> globalData;
 
@@ -25,14 +25,14 @@ public class BotContextContainer implements BotContext {
 
     private int failsCount;
 
-    public BotContextContainer() {
+    public BaseBotRuntime() {
         globalData = new HashMap();
         testData = new HashMap();
         fails = new ArrayList();
     }
 
     @Override
-    public BotContext setCurrentScript(String script) {
+    public BotRuntime setCurrentScript(String script) {
         scriptName = script;
         currentScriptLine = 0;
 
@@ -45,7 +45,7 @@ public class BotContextContainer implements BotContext {
     }
 
     @Override
-    public BotContext setCurrentScriptLine(int lineCount) {
+    public BotRuntime setCurrentScriptLine(int lineCount) {
         currentScriptLine = lineCount;
 
         return this;
@@ -57,7 +57,7 @@ public class BotContextContainer implements BotContext {
     }
 
     @Override
-    public BotContext setCurrentTest(String test) {
+    public BotRuntime setCurrentTest(String test) {
 
         currentTestName = test;
 
@@ -70,7 +70,7 @@ public class BotContextContainer implements BotContext {
     }
 
     @Override
-    public BotContext resetCurrentTestCount() {
+    public BotRuntime resetCurrentTestCount() {
 
         currentTestCount = 0;
 
@@ -114,7 +114,7 @@ public class BotContextContainer implements BotContext {
     }
 
     @Override
-    public BotContext setGlobalData(String key, Object value) {
+    public BotRuntime setGlobalData(String key, Object value) {
 
         globalData.put(key, value);
 
@@ -122,7 +122,7 @@ public class BotContextContainer implements BotContext {
     }
 
     @Override
-    public BotContext setTestData(String key, Object value) {
+    public BotRuntime setTestData(String key, Object value) {
 
         testData.put(key, value);
 

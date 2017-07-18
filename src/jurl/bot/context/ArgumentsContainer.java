@@ -1,4 +1,4 @@
-package jurl.testbot;
+package jurl.bot.context;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,6 +1,9 @@
-package jurl.testbot;
+package jurl.bot.context;
 
-class BotBaseSentencesGroup implements BotSentencesGroup {
+import jurl.bot.engine.BotRuntime;
+import jurl.bot.logger.BotLogger;
+
+public class BotBaseContext implements BotContext {
 
     @Override
     public String getName() {
@@ -8,27 +11,27 @@ class BotBaseSentencesGroup implements BotSentencesGroup {
     }
 
     @Override
-    public void boot(BotContext botContext) {
+    public void boot(BotRuntime botContext) {
         BotLogger.debug(botContext, "%s.boot()", getName());
     }
 
     @Override
-    public void cleanup(BotContext botContext) {
+    public void cleanup(BotRuntime botContext) {
         BotLogger.debug(botContext, "%s.cleanup()", getName());
     }
 
     @Override
-    public void beforeScript(BotContext botContext) {
+    public void beforeScript(BotRuntime botContext) {
         BotLogger.debug(botContext, "%s.beforeScript() : '%s", getName(), botContext.getCurrentScript());
     }
 
     @Override
-    public void afterScript(BotContext botContext) {
+    public void afterScript(BotRuntime botContext) {
         BotLogger.debug(botContext, "%s.afterScript() : '%s", getName(), botContext.getCurrentScript());
     }
 
     @Override
-    public void beforeTest(BotContext botContext) {
+    public void beforeTest(BotRuntime botContext) {
         BotLogger.debug(
                 botContext,
             "%s.beforeTest() : [%d][%d] '%s'",
@@ -40,7 +43,7 @@ class BotBaseSentencesGroup implements BotSentencesGroup {
     }
 
     @Override
-    public void afterTest(BotContext botContext) {
+    public void afterTest(BotRuntime botContext) {
         BotLogger.debug(
                 botContext,
             "%s.afterTest() : [%d][%d] '%s'",

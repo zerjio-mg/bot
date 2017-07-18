@@ -1,9 +1,12 @@
-package jurl.testbot;
+package jurl.bot.report;
+
+import jurl.bot.engine.BaseBotRuntime;
+import jurl.bot.logger.BotLogger;
 
 public class BotReporterDefault implements BotReporter {
 
     @Override
-    public void report(BotContextContainer context, long spentSeconds) {
+    public void report(BaseBotRuntime context, long spentSeconds) {
 
         long hours = spentSeconds / 3600;
         long minutes = (spentSeconds % 3600) / 60;

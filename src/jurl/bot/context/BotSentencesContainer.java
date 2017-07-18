@@ -1,4 +1,7 @@
-package jurl.testbot;
+package jurl.bot.context;
+
+import jurl.bot.annotation.BotSentence;
+import jurl.bot.engine.BotRuntime;
 
 import java.io.PrintStream;
 import java.lang.reflect.Method;
@@ -7,7 +10,7 @@ import java.util.List;
 
 public class BotSentencesContainer {
 
-    private List<BotSentencesGroup> groups;
+    private List<BotContext> groups;
 
     private List<BotSentenceHandler> handlers;
 
@@ -17,7 +20,7 @@ public class BotSentencesContainer {
         handlers = new ArrayList();
     }
 
-    public List<BotSentencesGroup> getGroups() {
+    public List<BotContext> getGroups() {
         return groups;
     }
 
@@ -39,15 +42,15 @@ public class BotSentencesContainer {
         out.println();
     }
 
-    public void addGroup(BotSentencesGroup botSentencesGroup) {
+    public void addGroup(BotContext botContext) {
 
-        groups.add(botSentencesGroup);
+        groups.add(botContext);
 
-        Method[] methods = botSentencesGroup.getClass().getMethods();
+        Method[] methods = botContext.getClass().getMethods();
         for (Method method : methods) {
             BotSentence statement = method.getAnnotation(BotSentence.class);
             if (statement != null) {
-                handlers.add(new BotSentenceHandler(botSentencesGroup, method, statement.sentence()));
+                handlers.add(new BotSentenceHandler(botContext, method, statement.sentence()));
             }
         }
     }
@@ -63,38 +66,38 @@ public class BotSentencesContainer {
         return null;
     }
 
-    public void boot(BotContext botContext) {
-        for (BotSentencesGroup group : getGroups()) {
+    public void boot(BotRuntime botContext) {
+        for (BotContext group : getGroups()) {
             group.boot(botContext);
         }
     }
 
-    public void beforeScript(BotContext botContext) {
-        for (BotSentencesGroup group : getGroups()) {
+    public void beforeScript(BotRuntime botContext) {
+        for (BotContext group : getGroups()) {
             group.beforeScript(botContext);
         }
     }
 
-    public void beforeTest(BotContext botContext, String test) {
-        for (BotSentencesGroup group : getGroups()) {
+    public void beforeTest(BotRuntime botContext) {
+        for (BotContext group : getGroups()) {
             group.beforeTest(botContext);
         }
     }
 
-    public void afterTest(BotContext botContext) {
-        for (BotSentencesGroup group : getGroups()) {
+    public void afterTest(BotRuntime botContext) {
+        for (BotContext group : getGroups()) {
             group.afterTest(botContext);
         }
     }
 
-    public void afterScript(BotContext botContext) {
-        for (BotSentencesGroup group : getGroups()) {
+    public void afterScript(BotRuntime botContext) {
+        for (BotContext group : getGroups()) {
             group.afterScript(botContext);
         }
     }
 
-    public void cleanup(BotContext botContext) {
-        for (BotSentencesGroup group : getGroups()) {
+    public void cleanup(BotRuntime botContext) {
+        for (BotContext group : getGroups()) {
             group.cleanup(botContext);
         }
     }

@@ -1,4 +1,4 @@
-package jurl.testbot;
+package jurl.bot.context;
 
 public interface Arguments {
 

@@ -1,4 +1,7 @@
-package jurl.testbot;
+package jurl.bot.context;
+
+import jurl.bot.engine.BotRuntime;
+import jurl.bot.logger.BotLogger;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -25,11 +28,11 @@ public class BotSentenceHandler {
 
     private Pattern pattern;
 
-    private BotSentencesGroup subject;
+    private BotContext subject;
 
     private Method action;
 
-    public BotSentenceHandler(BotSentencesGroup subject, Method action, String sentence) {
+    public BotSentenceHandler(BotContext subject, Method action, String sentence) {
 
         parameters = new ArrayList();
 
@@ -40,7 +43,7 @@ public class BotSentenceHandler {
         parseSentence();
     }
 
-    public BotSentencesGroup getSubject() {
+    public BotContext getSubject() {
         return subject;
     }
 
@@ -88,7 +91,7 @@ public class BotSentenceHandler {
      * @param sentence
      * @param botContext
      */
-    public boolean execute(String sentence, BotContext botContext) {
+    public boolean execute(String sentence, BotRuntime botContext) {
 
         try {
             action.invoke(subject, botContext, parseArguments(sentence));

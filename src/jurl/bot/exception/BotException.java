@@ -1,4 +1,4 @@
-package jurl.testbot;
+package jurl.bot.exception;
 
 public class BotException extends RuntimeException {
 

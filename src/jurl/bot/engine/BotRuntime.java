@@ -1,22 +1,22 @@
-package jurl.testbot;
+package jurl.bot.engine;
 
 import java.util.List;
 
-public interface BotContext {
+public interface BotRuntime {
 
-    BotContext setCurrentScript(String script);
+    BotRuntime setCurrentScript(String script);
 
     String getCurrentScript();
 
-    BotContext setCurrentScriptLine(int lineCount);
+    BotRuntime setCurrentScriptLine(int lineCount);
 
     int getCurrentScriptLine();
 
-    BotContext setCurrentTest(String test);
+    BotRuntime setCurrentTest(String test);
 
     String getCurrentTest();
 
-    BotContext resetCurrentTestCount();
+    BotRuntime resetCurrentTestCount();
 
     int getCurrentTestCount();
 
@@ -30,9 +30,9 @@ public interface BotContext {
 
     int getFailsCount();
 
-    BotContext setGlobalData(String key, Object value);
+    BotRuntime setGlobalData(String key, Object value);
 
-    BotContext setTestData(String key, Object value);
+    BotRuntime setTestData(String key, Object value);
 
     Object get(String key);
 

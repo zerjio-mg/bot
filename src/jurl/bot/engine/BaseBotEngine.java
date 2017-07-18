@@ -1,13 +1,18 @@
-package jurl.testbot;
+package jurl.bot.engine;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.lang.reflect.Method;
+import jurl.bot.context.BotSentenceHandler;
+import jurl.bot.context.BotSentencesContainer;
+import jurl.bot.context.BotContext;
+import jurl.bot.logger.BotLogger;
+import jurl.bot.reader.BotFileReader;
+import jurl.bot.reader.BotReader;
+import jurl.bot.report.BotReporterDefault;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class BotEngine {
+public class BaseBotEngine implements BotEngine {
 
     private static final String SENTENCE_PATTERN = "(\\w*)\\s*(.*)";
 
@@ -25,41 +30,44 @@ public class BotEngine {
 
     private Pattern pattern;
 
-    private BotContextContainer context;
+    private BaseBotRuntime context;
 
     private boolean skipTest;
 
-    public BotEngine() {
+    public BaseBotEngine(BotContext[] contexts) {
 
-        sentencesContainer = new BotSentencesContainer();
         pattern = Pattern.compile(SENTENCE_PATTERN);
 
-        sentencesContainer.addGroup(new SimpleSentencesGroup());
-        sentencesContainer.addGroup(new MoreSentencesGroup());
+        sentencesContainer = new BotSentencesContainer();
+        for (BotContext ctx: contexts) {
+            sentencesContainer.addGroup(ctx);
+        }
     }
 
-    public void list(String[] args) {
+    @Override
+    public void list(String[] sources) {
 
         sentencesContainer.list(System.out);
     }
 
-    public void run(String[] args) {
+    @Override
+    public void check(String[] sources) {
 
-        String folder = "";
+        throw new NotImplementedException();
+    }
 
-        if (args.length > 0) {
-            folder = String.format("%s/", args[0]);
-        }
+    @Override
+    public void run(String[] sources) {
 
         long start = System.currentTimeMillis();
 
-        context = new BotContextContainer();
+        context = new BaseBotRuntime();
 
         sentencesContainer.boot(context);
 
-        processBotScript(String.format("%s%s", folder, "test.bot"));
-        processBotScript(String.format("%s%s", folder, "test_1.bot"));
-        processBotScript(String.format("%s%s", folder, "test_2.bot"));
+        for (String script : sources) {
+            processBotScript(script);
+        }
 
         sentencesContainer.cleanup(context);
 
@@ -72,34 +80,29 @@ public class BotEngine {
 
         BotLogger.out("\nScript: %s", script);
 
-        context.setCurrentScript(script);
+        beforeScript(script);
 
-        context.resetCurrentTestCount();
-        sentencesContainer.beforeScript(context);
+        process(new BotFileReader(script));
+
+        afterScript();
+    }
+
+    private void process(BotReader reader) {
 
         try {
-
-            FileReader reader = new FileReader(script);
-
-            BufferedReader bufferedReader = new BufferedReader(reader);
+            reader.open();
             String line;
-            for (int lineCount = 1; (line = bufferedReader.readLine()) != null; lineCount++) {
-
-                line = line.trim();
-                if (!line.isEmpty() && !line.startsWith(";")) {
-                    context.setCurrentScriptLine(lineCount);
-                    processSentence(line);
-                }
+            while((line = reader.read()) != null) {
+                context.setCurrentScriptLine(reader.getCurrentLineCount());
+                processSentence(line);
             }
-
             reader.close();
 
-        } catch (IOException e) {
-            BotLogger.error(context, "Script '%s' not found", script);
+        } catch (Exception e) {
+            BotLogger.error(context, e.getMessage());
         }
 
         afterTest();
-        sentencesContainer.afterScript(context);
     }
 
     private void processSentence(String line) {
@@ -123,9 +126,7 @@ public class BotEngine {
                 BotLogger.out("%7s   %s", declaration, sentence);
 
                 if (isTestDeclaration(declaration)) {
-                    context.setCurrentTest(declaration);
-                    context.incCurrentTestCount();
-                    sentencesContainer.beforeTest(context, sentence);
+                    beforeTest(sentence);
                     return;
                 }
 
@@ -171,6 +172,22 @@ public class BotEngine {
         return false;
     }
 
+    private void beforeScript(String script) {
+
+        context.setCurrentScript(script);
+        context.resetCurrentTestCount();
+
+        sentencesContainer.beforeScript(context);
+    }
+
+    private void beforeTest(String test) {
+
+        context.setCurrentTest(test);
+        context.incCurrentTestCount();
+
+        sentencesContainer.beforeTest(context);
+    }
+
     private void afterTest() {
 
         if (context.getCurrentTestCount() == 0) {
@@ -180,5 +197,10 @@ public class BotEngine {
         sentencesContainer.afterTest(context);
 
         skipTest = false;
+    }
+
+    private void afterScript() {
+
+        sentencesContainer.afterScript(context);
     }
 }
